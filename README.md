@@ -1,29 +1,29 @@
-# Order-processing system — student starter
-
-This application intentionally contains defects. Your assignment has three parts only:
-
-1. Identify and correct at least 8 meaningful defects.
-2. Write at least 12 automated unit tests with `pytest`.
-3. Add `.github/workflows/tests.yml` to run tests on pushes and pull requests.
-
-## Application files
-
-- `models.py`: domain objects
-- `cart.py`: shopping cart and discounts
-- `repository.py`: SQLite products, saved carts, inventory and orders
-- `checkout.py`: checkout workflow
-- `payments.py`: simulated payment gateway
-- `setup_db.py` and `demo.py`: demo database and execution
-- `tests/test_smoke.py`: minimal smoke tests (not a solution)
-
-## Running locally
-
-```bash
-python -m pip install -r requirements.txt
-python -m pytest -q
-python setup_db.py
-python demo.py
-```
-
-Use temporary databases and fake payment tokens for unit tests. No real payment credentials are required.
 "# Security-and-Reliable-Programming" 
+
+
+Defects:
+
+1) In the database there is nothing blocking stock levels to go negative. to fix this a check was added to the table to reject any negative stock levels. 
+
+2) list_orders does not filter by the user when quiering the database leaking order information, the missing "WHERE user_id = ?" was added. 
+
+3) get_product ises f strings when it should be using parameterized queries to prevent SQL injection, to fix this it was changed to a parameterized query.
+
+4) the same issue as number 3 exists for get_saved_cart making it vulnrable to SQL attacks, to fix this a parameterized query was added in place of the f string. 
+
+5) in checkout.py, when payment is processed a print statement prints the payment token to the console, this is a security risk as it exposes sensitive information about the client and so should not be logged. to fix this the print statement was edited so checkout.py just says that it was charged but does not reveal the token.
+
+6) in cart.py, the cupon code SAVE15 reduces the price by 15 dollars, this means on a small order the total order price could be negative, to fix this the max or the order or 0 is selected.
+
+7) in checkout.py, as noted by the comment stock was updated before the client was charged so if the payment failed stock would still be reduced causing a mismatch, to fix this stock is now updated only if the payment is a sucsess.
+
+8) in cart.py when load() is called items stored in the database are added to the cart however if it is called again the items will be added again duplicating them in the cart, to fix this when load is called the cart is first emptied then loaded from the database to ensure the correct quantity. 
+
+Tests:
+
+See test_smoke for tests, they report
+C:\Users\russe\Desktop\SoftwareEng-COMP7082\Security and Reliable Programming\Order_Processing_Starter>python -m pytest -q
+.................                                                                                                [100%]
+17 passed in 0.93s
+
+C:\Users\russe\Desktop\SoftwareEng-COMP7082\Security and Reliable Programming\Order_Processing_Starter>
