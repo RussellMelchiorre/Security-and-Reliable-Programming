@@ -24,3 +24,7 @@ Tests:
 See test_smoke for tests, they report:
 
 ![Tests](image.png)
+
+And Github actions passes too:
+
+![Actions](github.png)
