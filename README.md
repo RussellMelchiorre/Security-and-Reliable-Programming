@@ -21,9 +21,6 @@ Defects:
 
 Tests:
 
-See test_smoke for tests, they report
-C:\Users\russe\Desktop\SoftwareEng-COMP7082\Security and Reliable Programming\Order_Processing_Starter>python -m pytest -q
-.................                                                                                                [100%]
-17 passed in 0.93s
+See test_smoke for tests, they report:
 
-C:\Users\russe\Desktop\SoftwareEng-COMP7082\Security and Reliable Programming\Order_Processing_Starter>
+![Tests](image.png)

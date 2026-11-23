@@ -1,10 +1,23 @@
 """Two simple smoke tests"""
 import sqlite3
+import pytest
 from setup_db import initialize
 from repository import StoreRepository
 from cart import ShoppingCart
 from checkout import CheckoutService
 from payments import FakePaymentGateway
+
+
+class FailingPaymentGateway:
+    def charge(self, amount, payment_token):
+        raise RuntimeError('Payment gateway unavailable')
+
+
+@pytest.fixture
+def repo(tmp_path):
+    db = tmp_path / 'test.db'
+    initialize(str(db))
+    return StoreRepository(str(db))
 
 def test_seed_product(tmp_path):
     db = tmp_path / 'test.db'
